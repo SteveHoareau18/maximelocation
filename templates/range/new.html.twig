@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Range{% endblock %}
+
+{% block body %}
+    <h1>Create new Range</h1>
+
+    {{ include('range/_form.html.twig') }}
+
+    <a href="{{ path('app_range_index') }}">back to list</a>
+{% endblock %}
