@@ -23,8 +23,14 @@ class Product
     #[ORM\Column]
     private ?bool $available = null;
 
+
+
     #[ORM\ManyToOne(inversedBy: 'products')]
-    private ?Range $theRange = null;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $description = null;
 
     public function getId(): ?int
     {
@@ -67,14 +73,27 @@ class Product
         return $this;
     }
 
-    public function getTheRange(): ?Range
+
+    public function getCategory(): ?Category
     {
-        return $this->theRange;
+        return $this->category;
     }
 
-    public function setTheRange(?Range $theRange): static
+    public function setCategory(?Category $category): static
     {
-        $this->theRange = $theRange;
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }

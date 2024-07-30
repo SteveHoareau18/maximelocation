@@ -2,14 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\RangeRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: RangeRepository::class)]
-#[ORM\Table(name: '`range`')]
-class Range
+#[ORM\Entity(repositoryClass: CategoryRepository::class)]
+class Category
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -19,10 +18,13 @@ class Range
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $description = null;
+
     /**
      * @var Collection<int, Product>
      */
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'theRange')]
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category')]
     private Collection $products;
 
     public function __construct()
@@ -47,6 +49,18 @@ class Range
         return $this;
     }
 
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Product>
      */
@@ -59,7 +73,7 @@ class Range
     {
         if (!$this->products->contains($product)) {
             $this->products->add($product);
-            $product->setTheRange($this);
+            $product->setCategory($this);
         }
 
         return $this;
@@ -69,8 +83,8 @@ class Range
     {
         if ($this->products->removeElement($product)) {
             // set the owning side to null (unless already changed)
-            if ($product->getTheRange() === $this) {
-                $product->setTheRange(null);
+            if ($product->getCategory() === $this) {
+                $product->setCategory(null);
             }
         }
 

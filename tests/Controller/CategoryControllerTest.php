@@ -2,24 +2,24 @@
 
 namespace App\Test\Controller;
 
-use App\Entity\Range;
+use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class RangeControllerTest extends WebTestCase
+class CategoryControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
     private EntityManagerInterface $manager;
     private EntityRepository $repository;
-    private string $path = '/range/';
+    private string $path = '/category/';
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
         $this->manager = static::getContainer()->get('doctrine')->getManager();
-        $this->repository = $this->manager->getRepository(Range::class);
+        $this->repository = $this->manager->getRepository(Category::class);
 
         foreach ($this->repository->findAll() as $object) {
             $this->manager->remove($object);
@@ -33,7 +33,7 @@ class RangeControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', $this->path);
 
         self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('Range index');
+        self::assertPageTitleContains('Category index');
 
         // Use the $crawler to perform additional assertions e.g.
         // self::assertSame('Some text on the page', $crawler->filter('.p')->first());
@@ -47,7 +47,8 @@ class RangeControllerTest extends WebTestCase
         self::assertResponseStatusCodeSame(200);
 
         $this->client->submitForm('Save', [
-            'range[name]' => 'Testing',
+            'category[name]' => 'Testing',
+            'category[description]' => 'Testing',
         ]);
 
         self::assertResponseRedirects($this->path);
@@ -58,8 +59,9 @@ class RangeControllerTest extends WebTestCase
     public function testShow(): void
     {
         $this->markTestIncomplete();
-        $fixture = new Range();
+        $fixture = new Category();
         $fixture->setName('My Title');
+        $fixture->setDescription('My Title');
 
         $this->manager->persist($fixture);
         $this->manager->flush();
@@ -67,7 +69,7 @@ class RangeControllerTest extends WebTestCase
         $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
 
         self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('Range');
+        self::assertPageTitleContains('Category');
 
         // Use assertions to check that the properties are properly displayed.
     }
@@ -75,8 +77,9 @@ class RangeControllerTest extends WebTestCase
     public function testEdit(): void
     {
         $this->markTestIncomplete();
-        $fixture = new Range();
+        $fixture = new Category();
         $fixture->setName('Value');
+        $fixture->setDescription('Value');
 
         $this->manager->persist($fixture);
         $this->manager->flush();
@@ -84,21 +87,24 @@ class RangeControllerTest extends WebTestCase
         $this->client->request('GET', sprintf('%s%s/edit', $this->path, $fixture->getId()));
 
         $this->client->submitForm('Update', [
-            'range[name]' => 'Something New',
+            'category[name]' => 'Something New',
+            'category[description]' => 'Something New',
         ]);
 
-        self::assertResponseRedirects('/range/');
+        self::assertResponseRedirects('/category/');
 
         $fixture = $this->repository->findAll();
 
         self::assertSame('Something New', $fixture[0]->getName());
+        self::assertSame('Something New', $fixture[0]->getDescription());
     }
 
     public function testRemove(): void
     {
         $this->markTestIncomplete();
-        $fixture = new Range();
+        $fixture = new Category();
         $fixture->setName('Value');
+        $fixture->setDescription('Value');
 
         $this->manager->persist($fixture);
         $this->manager->flush();
@@ -106,7 +112,7 @@ class RangeControllerTest extends WebTestCase
         $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
         $this->client->submitForm('Delete');
 
-        self::assertResponseRedirects('/range/');
+        self::assertResponseRedirects('/category/');
         self::assertSame(0, $this->repository->count([]));
     }
 }
