@@ -97,4 +97,8 @@ class Product
 
         return $this;
     }
+    public function __construct()
+    {
+        $this->createDate = new \DateTime();
+    }
 }

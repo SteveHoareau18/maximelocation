@@ -1,11 +1,70 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Product{% endblock %}
+{% block title %}Nouveau Produit{% endblock %}
 
 {% block body %}
-    <h1>Create new Product</h1>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <h1 class="mb-4">Créer un nouveau Produit</h1>
+                <div class="card">
+                    <div class="card-body">
+                        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                        <div class="mb-3">
+                            {{ form_label(form.name, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.name, {'attr': {'class': 'form-control', 'required': true}}) }}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.name) }}
+                            </div>
+                        </div>
+                        {% if form.description is defined %}
+                            <div class="mb-3">
+                                {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '3', 'required': true}}) }}
+                                <div class="invalid-feedback">
+                                    {{ form_errors(form.description) }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="mb-3">
+                            {{ form_label(form.category, 'Gamme', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.category, {'attr': {'class': 'form-select', 'required': true}}) }}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.category) }}
+                            </div>
+                        </div>
 
-    {{ include('product/_form.html.twig') }}
+                        <div class="mb-3 form-check">
+                            {{ form_widget(form.available, {'attr': {'class': 'form-check-input'}}) }}
+                            {{ form_label(form.available, 'Produit disponible', {'label_attr': {'class': 'form-check-label'}}) }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Ajouter le produit</button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="{{ path('app_product_index') }}" class="btn btn-secondary">Retour à la liste</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
-    <a href="{{ path('app_product_index') }}">back to list</a>
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
 {% endblock %}

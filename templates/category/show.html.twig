@@ -33,7 +33,7 @@
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light">Les differents gammes de produit à louer</h1>
+                <h1 class="fw-light">Les produit à louer</h1>
                 <p class="lead text-muted">....</p>
             </div>
         </div>
@@ -56,6 +56,9 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
                             <a type="submit" class="btn btn-sm btn-outline-secondary" href="{{ path('app_product_show',{"id":product.id}) }}">Voir</a>
+                            {% if app.user and 'ROLE_ADMIN' in app.user.roles %}
+                                <a type="submit" class="btn btn-sm btn-outline-secondary" href="{{ path('app_product_edit', {'id': product.id}) }}">Modifier</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -63,6 +66,9 @@
         </div>
     {% endfor %}
             </div>
+            {% if app.user and 'ROLE_ADMIN' in app.user.roles %}
+                <a type="submit" class="btn btn-primary btn-sm" href="{{ path('app_product_new')}}">Ajouter un Produit</a>
+            {% endif %}
         </div>
     </div>
 </main>

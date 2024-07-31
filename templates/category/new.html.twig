@@ -1,11 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Category{% endblock %}
+{% block title %}Nouvelle Catégorie{% endblock %}
 
 {% block body %}
-    <h1>Create new Category</h1>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <h1 class="mb-4">Créer une nouvelle Catégorie</h1>
+                <div class="card">
+                    <div class="card-body">
+                        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                        <div class="mb-3">
+                            {{ form_label(form.name, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.name, {'attr': {'class': 'form-control', 'required': true}}) }}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.name) }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '3', 'required': true}}) }}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.description) }}
+                            </div>
+                        </div>
+                        {% if form.isActive is defined %}
+                            <div class="mb-3 form-check">
+                                {{ form_widget(form.isActive, {'attr': {'class': 'form-check-input'}}) }}
+                                {{ form_label(form.isActive, 'Catégorie active', {'label_attr': {'class': 'form-check-label'}}) }}
+                            </div>
+                        {% endif %}
+                        <button type="submit" class="btn btn-primary">Ajouter la catégorie</button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="{{ path('app_category_index') }}" class="btn btn-secondary">Retour à la liste</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
-    {{ include('category/_form.html.twig') }}
-
-    <a href="{{ path('app_category_index') }}">back to list</a>
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
 {% endblock %}
