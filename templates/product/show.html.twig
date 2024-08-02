@@ -35,6 +35,9 @@
         </div>
 
         <div class="mt-4">
+            {% if app.user and 'ROLE_ADMIN' not in app.user.roles %}
+            <a href="{{ path('app_rent_new', {'id_product': product.id}) }}" class="btn btn-primary me-2">Louer</a>
+            {% endif %}
             <a href="{{ path('app_category_index') }}" class="btn btn-secondary me-2">Retour à la liste</a>
             {% if app.user and 'ROLE_ADMIN' in app.user.roles %}
                 <a href="{{ path('app_product_edit', {'id': product.id}) }}" class="btn btn-primary me-2">Modifier</a>

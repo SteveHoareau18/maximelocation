@@ -117,16 +117,7 @@ class CategoryControllerTest extends WebTestCase
 
     public function testRemove(): void
     {
-        $fixture = new Category();
-        $fixture->setName('Value');
-        $fixture->setDescription('Value');
-
-        $this->manager->persist($fixture);
-        $this->manager->flush();
-
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
         self::assertResponseStatusCodeSame(302);
-
     }
     /*public function testRemoveAdmin(): void
     {

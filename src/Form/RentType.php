@@ -15,21 +15,15 @@ class RentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('rental_start_date', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('rental_end_date', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
-            ->add('product', EntityType::class, [
-                'class' => Product::class,
-                'choice_label' => 'id',
-            ])
-        ;
+        ->add('rental_start_date', null, [
+            'widget' => 'single_text',
+            'label' => 'Date de début de location',
+        ])
+        ->add('rental_end_date', null, [
+            'widget' => 'single_text',
+            'label' => 'Date de fin de location',
+        ])
+    ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

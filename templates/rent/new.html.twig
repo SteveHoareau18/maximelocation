@@ -1,11 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Rent{% endblock %}
+{% block title %}Nouvelle Location{% endblock %}
 
 {% block body %}
-    <h1>Create new Rent</h1>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <h1 class="mb-4">Louer le produit {{ product.name }}</h1>
+                <div class="card">
+                    <div class="card-body">
+                        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                        <div class="mb-3">
+                            {{ form_label(form.rental_start_date, 'Date de début', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.rental_start_date, {'attr': {'class': 'form-control', 'required': true}}) }}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.rental_start_date) }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(form.rental_end_date, 'Date de fin', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.rental_end_date, {'attr': {'class': 'form-control', 'required': true}}) }}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.rental_end_date) }}
+                            </div>
+                        </div>
 
-    {{ include('rent/_form.html.twig') }}
 
-    <a href="{{ path('app_rent_index') }}">back to list</a>
+                        <button type="submit" class="btn btn-primary">Confirmer la location</button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="{{ path('app_category_index') }}" class="btn btn-secondary">Retour à la liste</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
 {% endblock %}

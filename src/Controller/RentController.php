@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
 use App\Entity\Rent;
 use App\Form\Rent1Type;
+use App\Form\RentType;
 use App\Repository\RentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,23 +24,31 @@ class RentController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_rent_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/{id_product}', name: 'app_rent_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, $id_product): Response
     {
         $rent = new Rent();
-        $form = $this->createForm(Rent1Type::class, $rent);
+
+        $product = $entityManager->getRepository(Product::class)->find($id_product);
+        if($product == null) throw $this->createNotFoundException('Le produit n\'existe pas');
+
+        $rent->setProduct($product);
+        $rent->setUser($this->getUser());
+
+        $form = $this->createForm(RentType::class, $rent);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($rent);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_rent_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_main', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('rent/new.html.twig', [
             'rent' => $rent,
             'form' => $form,
+            'product' => $product,
         ]);
     }
 
